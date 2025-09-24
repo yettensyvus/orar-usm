@@ -1,0 +1,395 @@
+        /* Base Styles */
+        body {
+            background-color: #f6fdf9;
+            min-height: 100vh;
+        }
+
+        /* Header Styles */
+        header {
+            background: #198754;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 0 0 15px 15px;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+            min-height: 80px;
+        }
+
+        header .logo {
+            height: 65px;
+            width: auto;
+            max-width: 65px;
+            object-fit: contain;
+        }
+
+        .header-title {
+            font-size: 1.5rem;
+            text-align: center;
+            flex: 1;
+        }
+
+        /* Faculty Card Styles */
+        .faculty-card {
+            border-radius: 12px;
+            border: 1px solid #d9f2e4;
+            padding: 18px;
+            background: white;
+            transition: all 0.25s ease-in-out;
+            cursor: pointer;
+            box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.08);
+            min-height: 80px;
+        }
+
+        .faculty-card:hover {
+            background: #e6fff2;
+            transform: translateY(-3px);
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .faculty-text {
+            flex: 1;
+            font-size: 0.95rem;
+            font-weight: 500;
+            line-height: 1.4;
+        }
+
+        .faculty-icon {
+            font-size: 1.8rem;
+            margin-left: 15px;
+            color: #198754;
+            flex-shrink: 0;
+        }
+
+        /* Toggle Group */
+        .toggle-group {
+            margin-bottom: 25px;
+            gap: 15px;
+        }
+
+        /* Fancy Toggle with Sliding Effect */
+        .slide-toggle {
+            position: relative;
+            display: inline-flex;
+            background: #eaf9f0;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .slide-toggle input {
+            display: none;
+        }
+
+        .slide-toggle label {
+            padding: 14px 30px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            color: #198754;
+            z-index: 2;
+            transition: color 0.3s;
+            text-align: center;
+            flex: 1;
+            white-space: nowrap;
+        }
+
+        .slide-toggle .slider {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 50%;
+            height: 100%;
+            background: #198754;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            z-index: 1;
+        }
+
+        /* Updated CSS for swapped buttons */
+        .slide-toggle input#profesori:checked~.slider {
+            transform: translateX(100%);
+        }
+
+        .slide-toggle input#bloc:checked~label[for="bloc"],
+        .slide-toggle input#profesori:checked~label[for="profesori"] {
+            color: #fff;
+        }
+
+        /* Fancy Login Button */
+        .btn-login {
+            background: linear-gradient(135deg, #20c997, #198754);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 8px 16px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.25s ease-in-out;
+            white-space: nowrap;
+            min-width: 80px;
+            justify-content: center;
+        }
+
+        .btn-login:hover {
+            background: linear-gradient(135deg, #198754, #157347);
+            transform: scale(1.05);
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+            color: white;
+        }
+
+        /* Fancy Dropdown */
+        .form-select {
+            width: 100%;
+            max-width: 300px;
+            padding: 12px 40px 12px 15px;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #198754;
+            background: #fff url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='%23198754' class='bi bi-chevron-down' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708'/%3E%3C/svg%3E") no-repeat right 15px center;
+            background-size: 18px;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            background-clip: padding-box, border-box;
+            transition: all 0.25s ease-in-out;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        }
+
+        .form-select:hover {
+            border-color: #20c997;
+            box-shadow: 0 4px 12px rgba(25, 135, 84, 0.25);
+        }
+
+        .form-select:focus {
+            outline: none;
+            border-color: #198754;
+            box-shadow: 0 0 0 4px rgba(25, 135, 84, 0.25);
+        }
+
+        select.form-select option {
+            padding: 10px;
+            font-size: 0.95rem;
+        }
+
+        /* Block selection specific styles */
+        .block-selection {
+            display: none;
+            margin-top: 1rem;
+        }
+
+        .block-selection.active {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .block-toggle {
+            background: #eaf9f0;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            padding: 4px;
+            box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            overflow: hidden;
+        }
+
+        .block-toggle input[type="radio"] {
+            display: none;
+        }
+
+        .block-toggle label {
+            padding: 8px 15px;
+            cursor: pointer;
+            color: #198754;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            position: relative;
+            z-index: 2;
+            font-size: 0.9rem;
+        }
+
+        .block-toggle input[type="radio"]:checked+label {
+            background: #198754;
+            color: white;
+            font-weight: 600;
+        }
+
+        /* Mobile Responsive Styles */
+        @media (max-width: 768px) {
+            header {
+                padding: 12px 15px;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            .header-title {
+                font-size: 1.2rem;
+                order: 3;
+                width: 100%;
+                margin-top: 10px;
+                text-align: center;
+            }
+
+            .logo {
+                height: 50px !important;
+                max-width: 50px !important;
+            }
+
+            .btn-login {
+                padding: 6px 12px;
+                font-size: 0.9rem;
+            }
+
+            .login-text {
+                display: none;
+            }
+
+            .slide-toggle {
+                max-width: 100%;
+            }
+
+            .slide-toggle label {
+                padding: 12px 20px;
+                font-size: 0.9rem;
+            }
+
+            .form-select {
+                max-width: 100%;
+                font-size: 0.9rem;
+            }
+
+            .faculty-card {
+                padding: 15px;
+                min-height: 70px;
+            }
+
+            .faculty-text {
+                font-size: 0.9rem;
+            }
+
+            .faculty-icon {
+                font-size: 1.5rem;
+                margin-left: 10px;
+            }
+
+            .container-fluid {
+                padding-left: 15px !important;
+                padding-right: 15px !important;
+            }
+        }
+
+        /* Extra small devices */
+        @media (max-width: 576px) {
+            header {
+                padding: 10px 12px;
+                border-radius: 0 0 10px 10px;
+            }
+
+            .header-title {
+                font-size: 1.1rem;
+            }
+
+            .logo {
+                height: 40px !important;
+                max-width: 40px !important;
+            }
+
+            .btn-login {
+                padding: 5px 10px;
+                font-size: 0.8rem;
+                min-width: 60px;
+            }
+
+            .slide-toggle label {
+                padding: 10px 15px;
+                font-size: 0.85rem;
+            }
+
+            .form-select {
+                padding: 10px 35px 10px 12px;
+                font-size: 0.85rem;
+            }
+
+            .faculty-card {
+                padding: 12px;
+                min-height: 60px;
+            }
+
+            .faculty-text {
+                font-size: 0.85rem;
+                line-height: 1.3;
+            }
+
+            .faculty-icon {
+                font-size: 1.3rem;
+                margin-left: 8px;
+            }
+
+            .toggle-group {
+                margin-bottom: 20px;
+            }
+
+            .container-fluid {
+                padding-left: 12px !important;
+                padding-right: 12px !important;
+            }
+        }
+
+        /* Large screens - optimize layout */
+        @media (min-width: 1200px) {
+            .container-fluid {
+                max-width: 1400px;
+                margin: 0 auto;
+            }
+
+            header {
+                padding: 20px 30px;
+            }
+
+            .header-title {
+                font-size: 1.75rem;
+            }
+
+            .faculty-card {
+                padding: 20px;
+                min-height: 90px;
+            }
+
+            .faculty-text {
+                font-size: 1rem;
+            }
+
+            .faculty-icon {
+                font-size: 2rem;
+            }
+        }
+
+        /* Landscape orientation on mobile */
+        @media (max-width: 768px) and (orientation: landscape) {
+            .header-title {
+                order: 0;
+                width: auto;
+                margin-top: 0;
+                flex: 1;
+                text-align: center;
+            }
+
+            header {
+                flex-wrap: nowrap;
+            }
+
+            .toggle-group {
+                flex-direction: row;
+                align-items: center;
+            }
+
+            .slide-toggle {
+                margin-bottom: 0;
+                margin-right: 15px;
+            }
+        }
