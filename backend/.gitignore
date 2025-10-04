@@ -31,3 +31,14 @@ build/
 
 ### VS Code ###
 .vscode/
+
+
+# Environment & secrets
+.env
+.env.*
+*.env
+
+# Docker
+**/pgdata/
+*.pid
+
