@@ -2,12 +2,15 @@ package com.yettensyvus.orarUSM.controller;
 
 import com.yettensyvus.orarUSM.dto.FacultyDto;
 import com.yettensyvus.orarUSM.service.FacultyService;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
-@Controller
+@RestController
+@RequestMapping("/api/faculties")
+@CrossOrigin(origins = "*")
 public class FacultyController {
 
     private final FacultyService facultyService;
@@ -16,10 +19,33 @@ public class FacultyController {
         this.facultyService = facultyService;
     }
 
-    @GetMapping("/faculties")
-    public String getFaculties(Model model) {
+    @GetMapping
+    public ResponseEntity<List<FacultyDto>> getAllFaculties() {
         List<FacultyDto> faculties = facultyService.getAllFaculties();
-        model.addAttribute("faculties", faculties);
-        return "faculties"; // faculties.html
+        return ResponseEntity.ok(faculties);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<FacultyDto> getFacultyById(@PathVariable Long id) {
+        FacultyDto faculty = facultyService.getFacultyById(id);
+        return ResponseEntity.ok(faculty);
+    }
+
+    @PostMapping
+    public ResponseEntity<FacultyDto> createFaculty(@RequestBody FacultyDto facultyDto) {
+        FacultyDto createdFaculty = facultyService.createFaculty(facultyDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdFaculty);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<FacultyDto> updateFaculty(@PathVariable Long id, @RequestBody FacultyDto facultyDto) {
+        FacultyDto updatedFaculty = facultyService.updateFaculty(id, facultyDto);
+        return ResponseEntity.ok(updatedFaculty);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteFaculty(@PathVariable Long id) {
+        facultyService.deleteFaculty(id);
+        return ResponseEntity.noContent().build();
     }
 }
