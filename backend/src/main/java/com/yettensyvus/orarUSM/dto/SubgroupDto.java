@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class FacultyDto {
+public class SubgroupDto {
     private Long id;
-    private String name;
-    private String description;
-    private String logo;
+    private String subgroupName;
+    private Long groupId;
+    private String groupName;
 }

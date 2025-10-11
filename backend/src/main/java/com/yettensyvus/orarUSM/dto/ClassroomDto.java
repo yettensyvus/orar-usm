@@ -7,9 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class FacultyDto {
+public class ClassroomDto {
     private Long id;
-    private String name;
-    private String description;
-    private String logo;
+    private String roomNumber;
+    private int capacity;
+    private Long buildingId;
+    private String buildingName;
 }
