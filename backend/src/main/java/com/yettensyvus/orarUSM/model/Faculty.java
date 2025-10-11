@@ -1,20 +1,16 @@
 package com.yettensyvus.orarUSM.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "faculty")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(of = "id")
 @ToString(exclude = {"teachers", "groups"})
 public class Faculty {
@@ -25,6 +21,8 @@ public class Faculty {
 
     @Column(nullable = false, unique = true)
     private String name;
+
+    private String description;
 
     private String logo;
 

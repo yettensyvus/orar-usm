@@ -8,9 +8,9 @@ import java.util.Set;
 
 @Entity
 @Table(name = "building")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(of = "id")
 @ToString(exclude = "classrooms")
 public class Building {
@@ -20,7 +20,7 @@ public class Building {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String name; // e.g. "Main Building"
+    private String name;
 
     private String address;
 

@@ -4,27 +4,32 @@ import com.yettensyvus.orarUSM.model.enums.DayOfWeekEnum;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "time_slot")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-@ToString
+@ToString(exclude = "lessons")
 public class TimeSlot {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Use enum instead of String
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private DayOfWeekEnum dayOfWeek;
 
     @Column(nullable = false)
-    private String startTime; // e.g. "08:00"
+    private String startTime;
 
     @Column(nullable = false)
-    private String endTime;   // e.g. "09:30"
+    private String endTime;
+
+    @OneToMany(mappedBy = "timeSlot", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Lesson> lessons = new HashSet<>();
 }

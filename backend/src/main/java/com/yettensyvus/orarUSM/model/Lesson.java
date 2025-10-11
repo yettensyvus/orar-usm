@@ -6,49 +6,43 @@ import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
+
 @Entity
 @Table(name = "lesson")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-@ToString(exclude = {"groups", "subgroups", "students", "schedule"})
+@ToString(exclude = {"groups", "subgroups", "students", "schedule", "subject", "teacher", "classroom", "timeSlot"})
 public class Lesson {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Subject
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "subject_id", nullable = false)
     private Subject subject;
 
-    // Teacher
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "teacher_id", nullable = false)
     private Teacher teacher;
 
-    // Classroom
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "classroom_id", nullable = false)
     private Classroom classroom;
 
-    // Link back to Schedule 👇
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "schedule_id", nullable = false)
     private Schedule schedule;
 
-    // Week type (ODD, EVEN, BOTH)
     @Enumerated(EnumType.STRING)
     private WeekTypeEnum weekType;
 
-    // Time slot
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "time_slot_id", nullable = false)
     private TimeSlot timeSlot;
 
-    // Relations to groups / subgroups / students
     @ManyToMany
     @JoinTable(
             name = "lesson_group",

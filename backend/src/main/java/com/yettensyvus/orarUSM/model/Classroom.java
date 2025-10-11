@@ -8,9 +8,9 @@ import java.util.Set;
 
 @Entity
 @Table(name = "classroom")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(of = "id")
 @ToString(exclude = {"lessons", "building"})
 public class Classroom {
@@ -20,16 +20,14 @@ public class Classroom {
     private Long id;
 
     @Column(nullable = false)
-    private String roomNumber; // e.g. "101A"
+    private String roomNumber;
 
     private int capacity;
 
-    // Relation to Building
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "building_id", nullable = false)
     private Building building;
 
-    // Lessons that happen in this classroom
     @OneToMany(mappedBy = "classroom", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Lesson> lessons = new HashSet<>();
 }

@@ -1,22 +1,18 @@
 package com.yettensyvus.orarUSM.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "subgroup")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-@ToString(exclude = {"students", "group"})
+@ToString(exclude = {"students", "lessons", "group"})
 public class Subgroup {
 
     @Id
@@ -24,7 +20,7 @@ public class Subgroup {
     private Long id;
 
     @Column(nullable = false)
-    private String subgroupName; // e.g. "A", "B"
+    private String subgroupName;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "group_id", nullable = false)
@@ -32,4 +28,7 @@ public class Subgroup {
 
     @OneToMany(mappedBy = "subgroup", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Student> students = new HashSet<>();
+
+    @ManyToMany(mappedBy = "subgroups")
+    private Set<Lesson> lessons = new HashSet<>();
 }

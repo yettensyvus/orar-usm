@@ -9,9 +9,9 @@ import java.util.Set;
 
 @Entity
 @Table(name = "subject")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(of = "id")
 @ToString(exclude = "lessons")
 public class Subject {
@@ -21,11 +21,11 @@ public class Subject {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String name; // e.g. "Algorithms", "Databases"
+    private String name;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private SubjectTypeEnum type; // COURSE, LABORATORY, SEMINAR, etc.
+    private SubjectTypeEnum type;
 
     @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Lesson> lessons = new HashSet<>();
