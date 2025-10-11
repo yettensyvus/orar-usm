@@ -1,0 +1,145 @@
+package com.yettensyvus.orarUSM.service.impl;
+
+import com.yettensyvus.orarUSM.dto.AuthResponse;
+import com.yettensyvus.orarUSM.dto.LoginRequest;
+import com.yettensyvus.orarUSM.dto.RegisterRequest;
+import com.yettensyvus.orarUSM.dto.UserDto;
+import com.yettensyvus.orarUSM.model.Role;
+import com.yettensyvus.orarUSM.model.User;
+import com.yettensyvus.orarUSM.model.enums.RoleEnum;
+import com.yettensyvus.orarUSM.repository.RoleRepository;
+import com.yettensyvus.orarUSM.repository.UserRepository;
+import com.yettensyvus.orarUSM.service.UserService;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+@Service
+@Transactional
+public class UserServiceImpl implements UserService {
+
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository) {
+        this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
+    }
+
+    @Override
+    public AuthResponse register(RegisterRequest request) {
+        // Check if username already exists
+        if (userRepository.existsByUserName(request.getUserName())) {
+            return AuthResponse.builder()
+                    .message("Username already exists")
+                    .build();
+        }
+
+        // Create new user
+        User user = User.builder()
+                .userName(request.getUserName())
+                .password(request.getPassword()) // In production, hash the password!
+                .roles(new HashSet<>())
+                .build();
+
+        // Assign roles
+        if (request.getRoles() != null && !request.getRoles().isEmpty()) {
+            for (RoleEnum roleEnum : request.getRoles()) {
+                Role role = roleRepository.findByName(roleEnum)
+                        .orElseGet(() -> {
+                            Role newRole = Role.builder()
+                                    .name(roleEnum)
+                                    .build();
+                            return roleRepository.save(newRole);
+                        });
+                user.getRoles().add(role);
+            }
+        } else {
+            // No default role - users must be assigned a specific role
+            return AuthResponse.builder()
+                    .message("At least one role must be specified (STUDENT, PROFESSOR, or ADMIN)")
+                    .build();
+        }
+
+        User savedUser = userRepository.save(user);
+
+        return AuthResponse.builder()
+                .message("User registered successfully")
+                .user(convertToDto(savedUser))
+                .token("mock-jwt-token") // Replace with actual JWT generation
+                .build();
+    }
+
+    @Override
+    public AuthResponse login(LoginRequest request) {
+        User user = userRepository.findByUserName(request.getUserName())
+                .orElse(null);
+
+        if (user == null) {
+            return AuthResponse.builder()
+                    .message("Invalid username or password")
+                    .build();
+        }
+
+        // In production, use password encoder to verify
+        if (!user.getPassword().equals(request.getPassword())) {
+            return AuthResponse.builder()
+                    .message("Invalid username or password")
+                    .build();
+        }
+
+        return AuthResponse.builder()
+                .message("Login successful")
+                .user(convertToDto(user))
+                .token("mock-jwt-token") // Replace with actual JWT generation
+                .build();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public UserDto getUserById(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+        return convertToDto(user);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public UserDto getUserByUserName(String userName) {
+        User user = userRepository.findByUserName(userName)
+                .orElseThrow(() -> new RuntimeException("User not found with username: " + userName));
+        return convertToDto(user);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<UserDto> getAllUsers() {
+        return userRepository.findAll().stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void deleteUser(Long id) {
+        if (!userRepository.existsById(id)) {
+            throw new RuntimeException("User not found with id: " + id);
+        }
+        userRepository.deleteById(id);
+    }
+
+    private UserDto convertToDto(User user) {
+        Set<RoleEnum> roleEnums = user.getRoles().stream()
+                .map(Role::getName)
+                .collect(Collectors.toSet());
+
+        return UserDto.builder()
+                .id(user.getId())
+                .userName(user.getUserName())
+                .roles(roleEnums)
+                .build();
+    }
+}

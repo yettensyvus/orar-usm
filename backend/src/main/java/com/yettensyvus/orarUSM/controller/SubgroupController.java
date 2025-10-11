@@ -10,7 +10,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/subgroups")
-@CrossOrigin(origins = "*")
 public class SubgroupController {
 
     private final SubgroupService subgroupService;
