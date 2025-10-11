@@ -8,17 +8,26 @@ import org.springframework.stereotype.Component;
 public class FacultyMapper {
 
     public FacultyDto toDto(Faculty entity) {
+        if (entity == null) {
+            return null;
+        }
         return new FacultyDto(
                 entity.getId(),
                 entity.getName(),
-                entity.getLogo(),
-                generateSlug(entity.getName())
+                entity.getDescription(),
+                entity.getLogo()
         );
     }
 
-    private String generateSlug(String name) {
-        return name.toLowerCase()
-                .replaceAll("[^a-z0-9ăâîșț ]", "")
-                .replace(" ", "-");
+    public Faculty toEntity(FacultyDto dto) {
+        if (dto == null) {
+            return null;
+        }
+        Faculty faculty = new Faculty();
+        faculty.setId(dto.getId());
+        faculty.setName(dto.getName());
+        faculty.setDescription(dto.getDescription());
+        faculty.setLogo(dto.getLogo());
+        return faculty;
     }
 }
