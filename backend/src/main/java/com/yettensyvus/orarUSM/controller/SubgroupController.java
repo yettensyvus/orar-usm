@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/subgroups")
+@RequestMapping("/subgroups")
 public class SubgroupController {
 
     private final SubgroupService subgroupService;
