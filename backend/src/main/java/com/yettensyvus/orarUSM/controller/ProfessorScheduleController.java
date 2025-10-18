@@ -5,12 +5,14 @@ import com.yettensyvus.orarUSM.dto.TeacherDto;
 import com.yettensyvus.orarUSM.service.LessonService;
 import com.yettensyvus.orarUSM.service.TeacherService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/professor")
+@PreAuthorize("hasRole('PROFESSOR')")
 public class ProfessorScheduleController {
 
     private final TeacherService teacherService;

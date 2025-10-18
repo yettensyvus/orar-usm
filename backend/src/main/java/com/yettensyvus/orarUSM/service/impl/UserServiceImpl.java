@@ -9,7 +9,13 @@ import com.yettensyvus.orarUSM.model.User;
 import com.yettensyvus.orarUSM.model.enums.RoleEnum;
 import com.yettensyvus.orarUSM.repository.RoleRepository;
 import com.yettensyvus.orarUSM.repository.UserRepository;
+import com.yettensyvus.orarUSM.security.JwtTokenProvider;
 import com.yettensyvus.orarUSM.service.UserService;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,10 +30,20 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
+    private final JwtTokenProvider tokenProvider;
 
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository) {
+    public UserServiceImpl(UserRepository userRepository, 
+                          RoleRepository roleRepository,
+                          PasswordEncoder passwordEncoder,
+                          AuthenticationManager authenticationManager,
+                          JwtTokenProvider tokenProvider) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.authenticationManager = authenticationManager;
+        this.tokenProvider = tokenProvider;
     }
 
     @Override
@@ -39,10 +55,10 @@ public class UserServiceImpl implements UserService {
                     .build();
         }
 
-        // Create new user
+        // Create new user with hashed password
         User user = User.builder()
                 .userName(request.getUserName())
-                .password(request.getPassword()) // In production, hash the password!
+                .password(passwordEncoder.encode(request.getPassword()))
                 .roles(new HashSet<>())
                 .build();
 
@@ -67,36 +83,50 @@ public class UserServiceImpl implements UserService {
 
         User savedUser = userRepository.save(user);
 
+        // Authenticate and generate JWT token
+        Authentication authentication = authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(
+                request.getUserName(),
+                request.getPassword()
+            )
+        );
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = tokenProvider.generateToken(authentication);
+
         return AuthResponse.builder()
                 .message("User registered successfully")
                 .user(convertToDto(savedUser))
-                .token("mock-jwt-token") // Replace with actual JWT generation
+                .token(jwt)
                 .build();
     }
 
     @Override
     public AuthResponse login(LoginRequest request) {
-        User user = userRepository.findByUserName(request.getUserName())
-                .orElse(null);
+        try {
+            // Authenticate user
+            Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                    request.getUserName(),
+                    request.getPassword()
+                )
+            );
 
-        if (user == null) {
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String jwt = tokenProvider.generateToken(authentication);
+
+            User user = userRepository.findByUserName(request.getUserName())
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+
+            return AuthResponse.builder()
+                    .message("Login successful")
+                    .user(convertToDto(user))
+                    .token(jwt)
+                    .build();
+        } catch (Exception e) {
             return AuthResponse.builder()
                     .message("Invalid username or password")
                     .build();
         }
-
-        // In production, use password encoder to verify
-        if (!user.getPassword().equals(request.getPassword())) {
-            return AuthResponse.builder()
-                    .message("Invalid username or password")
-                    .build();
-        }
-
-        return AuthResponse.builder()
-                .message("Login successful")
-                .user(convertToDto(user))
-                .token("mock-jwt-token") // Replace with actual JWT generation
-                .build();
     }
 
     @Override

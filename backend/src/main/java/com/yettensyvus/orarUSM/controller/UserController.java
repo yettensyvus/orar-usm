@@ -3,12 +3,14 @@ package com.yettensyvus.orarUSM.controller;
 import com.yettensyvus.orarUSM.dto.UserDto;
 import com.yettensyvus.orarUSM.service.UserService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/users")
+@PreAuthorize("hasRole('ADMIN')")
 public class UserController {
 
     private final UserService userService;
