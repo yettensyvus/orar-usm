@@ -9,12 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Controller for admin-specific operations.
- * Admins can manage users, view statistics, and perform administrative tasks.
- */
 @RestController
-@RequestMapping("/api/admin")
+@RequestMapping("/admin")
 public class AdminController {
 
     private final UserService userService;
@@ -41,27 +37,18 @@ public class AdminController {
         this.groupService = groupService;
     }
 
-    /**
-     * Get all users in the system
-     */
     @GetMapping("/users")
     public ResponseEntity<List<UserDto>> getAllUsers() {
         List<UserDto> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
     }
 
-    /**
-     * Delete a user by ID
-     */
     @DeleteMapping("/users/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }
 
-    /**
-     * Get system statistics
-     */
     @GetMapping("/statistics")
     public ResponseEntity<Map<String, Object>> getSystemStatistics() {
         Map<String, Object> stats = new HashMap<>();
@@ -77,18 +64,12 @@ public class AdminController {
         return ResponseEntity.ok(stats);
     }
 
-    /**
-     * Get user by ID (admin can view any user)
-     */
     @GetMapping("/users/{id}")
     public ResponseEntity<UserDto> getUserById(@PathVariable Long id) {
         UserDto user = userService.getUserById(id);
         return ResponseEntity.ok(user);
     }
 
-    /**
-     * Health check endpoint for admin monitoring
-     */
     @GetMapping("/health")
     public ResponseEntity<Map<String, String>> healthCheck() {
         Map<String, String> health = new HashMap<>();

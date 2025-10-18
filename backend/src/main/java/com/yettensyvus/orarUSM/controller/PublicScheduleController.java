@@ -7,10 +7,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * Public controller for guest/unauthenticated users to view schedules.
- * These endpoints are accessible without authentication.
- */
 @RestController
 @RequestMapping("/api/public")
 public class PublicScheduleController {
